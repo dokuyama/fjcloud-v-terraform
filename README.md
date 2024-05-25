@@ -7,7 +7,7 @@ FJcloud-Vのインフラ構成部分を自動化する事を目的とする。
 
 原則としては サブディレクトリの *.tf はシンボリックリンクだが、例外的な処理を追加する事ができるように、実体のファイルとして分岐する事ができる事を想定した。
 
-このコードで作成できる環境については、[docs/vars-config-samples.md](#./docs/vars-config-samples.md) を参照すること。
+このコードで作成できる環境については、[docs/vars-config-samples.md](#https://github.com/dokuyama/fjcloud-v-terraform/blob/main/docs/vars-config-samples.md) を参照すること。
 
 ## 使い方
 
