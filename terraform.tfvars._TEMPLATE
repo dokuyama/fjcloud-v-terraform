@@ -1,0 +1,109 @@
+# Template ファイルの "%%proj_name%%" は、スクリプトで置換する。
+# 
+
+# アカウント情報
+access_key = "[YOUR ACCESS_KEY]"
+secret_key = "[YOUR ACCESS_SECRET_KEY]"
+# Default region: "jp-east-1"
+#region = "jp-west-1"
+# keypair_name: 6-32 アルファベットのみ
+keypair_name = "%%proj_name%%key"
+# public_key: 以下のコマンドの実行結果を貼る
+# $ base64 ssh/id_rsa.pub -w0
+public_key = "[YOUR PUBLIC_KEY]"
+
+# az の定義。デフォルトはsingle az
+# カスタマイズする際にはregionに合うものを定義すること
+# 2つのazにcompute instanceを分散する例:
+#az = {
+#  "0" = "east-11"
+#  "1" = "east-12"
+#}
+
+# Computing
+# compute instance名に使う名前のプレフィックス
+compute_name_prefix = "web"
+# 2台のCompute Instanceを作成する例
+#compute_instance_number = "2"
+os_image_name = "Rocky Linux 9.3"
+# Compute に適用するSecurity Groupのルール
+# 以下の例では、TCP Port 80/443, 22 を全開放、Private LANを全開放
+#compute_security_group_rules = [
+#  { name = "http", from_port = 80, protocol = "TCP", cidr_ip = "0.0.0.0/0" },
+#  { name = "https", from_port = 443, protocol = "TCP", cidr_ip = "0.0.0.0/0" },
+#  { name = "ssh", from_port = 22, protocol = "TCP", cidr_ip = "0.0.0.0/0" },
+#  { name = "private_ip", from_port = 0, protocol = "ANY", cidr_ip = "10.0.0.0/8" }
+#]
+
+
+# L4 LoadBalancer
+# L4ロードバランサーの作成を行うかどうかのスイッチ (デフォルトでは作らない)
+#create_l4_loadbalancer = true
+# SSL Settings for SSL Accellerator
+ssl_certificate = "certs/test.crt"
+ssl_key = "certs/test.key"
+#ssl_ca = "certs/test-ca.crt"
+ssl_ca = ""
+ssl_description = "test certficate for localhost"
+# LoadBalancer Settings
+l4lb_load_balancer_name = "%%proj_name%%lb"
+l4lb_instance_port = 80
+l4lb_load_balancer_port = 80
+# Traffic Mbps
+l4lb_network_volume = 10
+l4lb_health_check_target = "TCP:80"
+l4lb_sorry_page_enable = true
+l4lbssl_load_balancer_port = 443
+
+# RDB
+# RDBの作成を行うかどうかのスイッチ (デフォルトでは作らない)
+#create_rdb = true
+# rdb_availability_zone : default az is "east-11"
+#rdb_availability_zone = "east-12"
+rdb_db_name = "%%proj_name%%db"
+rdb_engine = "mysql"
+rdb_engine_version = "5.7.15"
+rdb_port = 3306
+rdb_identifier = "%%proj_name%%-db"
+rdb_instance_class = "db.e-small"
+rdb_username = "%%proj_name%%"
+rdb_password = "tftest"
+# rdb_multi_az : default = false
+rdb_multi_az = true
+# rdb_publicly_accessible : default is false
+#rdb_publicly_accessible = true
+# 0 (High-Speed Storage), 1 (Flash Drive), 2 (Standard Flash Storage), or 3 (High-Speed Flash Storage). The default is 0
+rdb_storage_type = 2
+rdb_parameter_group_name = "%%proj_name%%-db-paramgroup"
+# RDB Parameter Group
+rdb_pg_description = null
+rdb_pg_family = "mysql5.7"
+rdb_pg_name = "%%proj_name%%-db-paramgroup"
+# rdb_pg_parameters setting sample:
+#rdb_pg_parameters = [
+#  { name  = "character_set_server", value = "utf8"  },
+#  { name  = "character_set_client", value = "utf8"  },
+#  { name  = "slow_query_log", value = "1"  }
+#]
+# RDB Security Group
+rdb_sg_group_name_prefix = "%%proj_name%%dbsg"
+
+# 専用Private LAN
+# 作る場合 true, デフォルトはfalse
+#use_private_lan = true
+privlan_name_prefix = "%%proj_name%%L"
+
+# プライベートブリッジを利用するかどうかのスイッチ (デフォルトはfalse)
+# プライベートブリッジを利用する際には、作成するサブネットのIPアドレスを共通する必要がある
+#use_private_bridge = true
+# プライベートブリッジを利用する際の共通のプライベートネットワークのCIDRのアドレスを指定する際は以下を設定する
+#priv_lan_common_cidr_block_prefix = "10.20.0"
+
+# Private LANを作成する時、rdbのIPアドレスを指定する。
+# vip, master, slave の3つの連番で利用される。
+# 最初の1つのアドレスの4オクテット目を指定する。 例: (aaa.bbb.ccc.101)
+rdb_private_addr_suffix = "101"
+
+# ルータ(専用Private LANを使う時のみ必要)
+rt_name_prefix = "%%proj_name%%rt"
+
